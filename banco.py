@@ -5,15 +5,32 @@ Funciones de un banco
 -Retiro de dinero
 -Ingresar dinero
 """
+import random 
 def usuario ():
     datos = {
-        "Nombre": "Ever",
-        "Apellido": "Rosales",
-        "Fecha de nacimiento": 24,
-        "Numero de celular": 5563372685
-        "Usuario": 
-        "Contraseña": 
+        "Nombre": None,
+        "Apellido": None,
+        "FechaNacimiento": None,
+        "Celular": None,
+        "CURP": None,
+        "Ciudad": None
     }
-    print(datos)
-
+    datos["Nombre"] = str(input("Ingresa el nombre: "))
+    datos["Apellido"] = str(input("Ingresa primer apellido: "))
+    datos["FechaNacimiento"] = int(input("Ingresa fecha de nacimiento ddmmaa: "))
+    datos["Celular"]=int(input("Ingresa tu numero de celular: "))
+    datos["CURP"]=str(input("Ingresa tu CURP: "))
+    datos["Ciudad"]=str(input("Ingresa la Ciudad de nacimiento: "))
+    print("********BIENVENIDO********")
+    print("Nombre: ", datos["Nombre"])
+    print("Apellido: ", datos["Apellido"])
+    nombreUsuario = []
+    nombreUsuario = datos["CURP"]
+    print(nombreUsuario)
+    print(type(nombreUsuario))
 usuario ()
+
+def estadoCuenta ():
+    print("*******ESTADO DE CUENTA*******")
+
+estadoCuenta()
