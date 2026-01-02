@@ -6,6 +6,7 @@ Funciones de un banco
 -Ingresar dinero
 """
 import sqlite3
+import random
 def crear_conexion():
     conexion = sqlite3.connect("sistema_bancario.db")
     cursor = conexion.cursor()
@@ -17,7 +18,9 @@ def crear_conexion():
             FechaNacimiento INTEGER,
             Celular INTEGER,
             Curp TEXT UNIQUE,
-            Ciudad TEXT
+            Ciudad TEXT,
+            NombreUsuario TEXT,
+            Constraseña TEXT
         )
     ''')
     conexion.commit()
@@ -29,20 +32,25 @@ def usuario ():
     Celular=input("Ingresa numero de celular: ")
     Curp=input("Ingresa CURP: ")
     Ciudad=input("Ingresa tu ciudad de origen: ")
-
+    #Creando nombre de usuario
+    numero = random.randrange(100)
+    valor = str(numero)
+    NombreUsuario=Nombre+Apellido+valor
+    Constraseña=input("Ingresa una contraseña: ")
     try:
         conexion= sqlite3.connect("sistema_bancario.db")
         cursor=conexion.cursor()
-        sql='''INSERT INTO usuarios (Nombre, Apellido, FechaNacimiento, Celular, Curp, Ciudad) 
-                VALUES (?, ?, ?, ?, ?, ?)'''
-        valores=(Nombre,Apellido,FechaNacimiento,Celular,Curp,Ciudad)
+        sql='''INSERT INTO usuarios (Nombre, Apellido, FechaNacimiento, Celular, Curp, Ciudad, NombreUsuario, Constraseña) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'''
+        valores=(Nombre,Apellido,FechaNacimiento,Celular,Curp,Ciudad,NombreUsuario,Constraseña)
         cursor.execute(sql,valores)
         conexion.commit()
         print("****BIENVENIDO****")
-        print(Nombre, Apellido)
+        print("Usuario: ", NombreUsuario)
+        print("*******")
     except sqlite3.IntegrityError:
         print("ERROR: El CURP ya está registrado...")
     finally:
         conexion.close()
-crear_conexion()
-usuario ()
+    crear_conexion()
+    return Nombre, Apellido, FechaNacimiento,Celular,Curp,Ciudad,NombreUsuario,Constraseña
