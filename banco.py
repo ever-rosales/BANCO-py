@@ -80,7 +80,7 @@ def estadoCuenta ():
 estadoCuenta()
 
 
-"""
+
 def ingresarDinero ():
     nombreUsuario=input("Ingresa tu nombre de usuario: ")
     Contraseña=input("Ingresa tu contraseña: ")
@@ -92,4 +92,17 @@ def ingresarDinero ():
     else:
         print("Usuario no encontrado")
 ingresarDinero()
-"""
+
+
+def retirarDinero():
+    nombreUsuario=input("Ingresa tu nombre de usuario: ")
+    Contraseña=input("Ingresa tu contraseña: ")
+    if (nombreUsuario==nombreUsuario) and (Contraseña==Contraseña):
+        print("Usuario: ", nombreUsuario)
+        Monto=int(input("Ingresa el monto a retirar de tu cuenta: "))
+        Monto-=Monto
+        print("Monto disponible $", Monto)
+    else:
+        print("Usuario no encontrado")
+
+retirarDinero()
