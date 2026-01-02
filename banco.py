@@ -20,7 +20,8 @@ def crear_conexion():
             Curp TEXT UNIQUE,
             Ciudad TEXT,
             NombreUsuario TEXT,
-            Constraseña TEXT
+            Constraseña TEXT,
+            Monto INTEGER
         )
     ''')
     conexion.commit()
@@ -41,16 +42,31 @@ def usuario ():
         conexion= sqlite3.connect("sistema_bancario.db")
         cursor=conexion.cursor()
         sql='''INSERT INTO usuarios (Nombre, Apellido, FechaNacimiento, Celular, Curp, Ciudad, NombreUsuario, Constraseña) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'''
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)'''
         valores=(Nombre,Apellido,FechaNacimiento,Celular,Curp,Ciudad,NombreUsuario,Constraseña)
         cursor.execute(sql,valores)
+        #agregando una nueva columna
+        cursor.execute("ALTER TABLE usuarios ADD COLUMN monto REAL DEFAULT 0.0")
         conexion.commit()
         print("****BIENVENIDO****")
         print("Usuario: ", NombreUsuario)
         print("*******")
     except sqlite3.IntegrityError:
         print("ERROR: El CURP ya está registrado...")
+        print("La columna ya existe o hubo error")
     finally:
         conexion.close()
-    crear_conexion()
-    return Nombre, Apellido, FechaNacimiento,Celular,Curp,Ciudad,NombreUsuario,Constraseña
+crear_conexion()
+usuario()
+
+"""
+def estadoCuenta ():
+    nombreUsuario=input("Ingresa tu nombre de usuario: ")
+    Contraseña=input("Ingresa tu contraseña: ")
+    if (nombreUsuario==nombreUsuario) and (Contraseña==Contraseña):
+        print("ESTADO DE CUENTA")
+        print("Bienvenido ", nombreUsuario)
+
+
+estadoCuenta()
+"""
