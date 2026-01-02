@@ -34,6 +34,7 @@ def crear_conexion():
     ''')
     conexion.commit()
     conexion.close()
+"""
 def usuario ():
     Nombre = input("Ingresa el nombre: ")
     Apellido = input("Ingresa el apellido: ")
@@ -49,12 +50,10 @@ def usuario ():
     try:
         conexion= sqlite3.connect("sistema_bancario.db")
         cursor=conexion.cursor()
-        sql='''INSERT INTO usuarios (Nombre, Apellido, FechaNacimiento, Celular, Curp, Ciudad, NombreUsuario, Constraseña) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)'''
-        valores=(Nombre,Apellido,FechaNacimiento,Celular,Curp,Ciudad,NombreUsuario,Constraseña)
+        sql='''INSERT INTO usuarios (Nombre, Apellido, FechaNacimiento, Celular, Curp, Ciudad, NombreUsuario, Constraseña, Monto) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'''
+        valores=(Nombre,Apellido,FechaNacimiento,Celular,Curp,Ciudad,NombreUsuario,Constraseña,Monto)
         cursor.execute(sql,valores)
-        #agregando una nueva columna
-        cursor.execute("ALTER TABLE usuarios ADD COLUMN monto REAL DEFAULT 0.0")
         conexion.commit()
         print("****BIENVENIDO****")
         print("Usuario: ", NombreUsuario)
@@ -66,15 +65,31 @@ def usuario ():
         conexion.close()
 crear_conexion()
 usuario()
-
 """
+
+
 def estadoCuenta ():
     nombreUsuario=input("Ingresa tu nombre de usuario: ")
     Contraseña=input("Ingresa tu contraseña: ")
     if (nombreUsuario==nombreUsuario) and (Contraseña==Contraseña):
         print("ESTADO DE CUENTA")
         print("Bienvenido ", nombreUsuario)
-
-
+        print("Saldo actual $", Monto)
+    else:
+        print("Usuario no encontrado")
 estadoCuenta()
+
+
+"""
+def ingresarDinero ():
+    nombreUsuario=input("Ingresa tu nombre de usuario: ")
+    Contraseña=input("Ingresa tu contraseña: ")
+    if (nombreUsuario==nombreUsuario) and (Contraseña==Contraseña):
+        print("Usuario: ", nombreUsuario)
+        Monto=int(input("Ingresa el monto a tu cuenta: "))
+        Monto+=Monto
+        print("Monto disponible $", Monto)
+    else:
+        print("Usuario no encontrado")
+ingresarDinero()
 """
