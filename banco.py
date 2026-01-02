@@ -7,6 +7,14 @@ Funciones de un banco
 """
 import sqlite3
 import random
+Nombre= None
+Apellido = None
+FechaNacimiento = None
+Celular = None
+Curp = None
+Ciudad = None
+Contraseña = None
+Monto = 0
 def crear_conexion():
     conexion = sqlite3.connect("sistema_bancario.db")
     cursor = conexion.cursor()
