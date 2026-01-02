@@ -5,32 +5,44 @@ Funciones de un banco
 -Retiro de dinero
 -Ingresar dinero
 """
-import random 
+import sqlite3
+def crear_conexion():
+    conexion = sqlite3.connect("sistema_bancario.db")
+    cursor = conexion.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS usuarios(
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            Nombre TEXT NOT NULL,
+            Apellido TEXT NOT NULL,
+            FechaNacimiento INTEGER,
+            Celular INTEGER,
+            Curp TEXT UNIQUE,
+            Ciudad TEXT
+        )
+    ''')
+    conexion.commit()
+    conexion.close()
 def usuario ():
-    datos = {
-        "Nombre": None,
-        "Apellido": None,
-        "FechaNacimiento": None,
-        "Celular": None,
-        "CURP": None,
-        "Ciudad": None
-    }
-    datos["Nombre"] = str(input("Ingresa el nombre: "))
-    datos["Apellido"] = str(input("Ingresa primer apellido: "))
-    datos["FechaNacimiento"] = int(input("Ingresa fecha de nacimiento ddmmaa: "))
-    datos["Celular"]=int(input("Ingresa tu numero de celular: "))
-    datos["CURP"]=str(input("Ingresa tu CURP: "))
-    datos["Ciudad"]=str(input("Ingresa la Ciudad de nacimiento: "))
-    print("********BIENVENIDO********")
-    print("Nombre: ", datos["Nombre"])
-    print("Apellido: ", datos["Apellido"])
-    nombreUsuario = []
-    nombreUsuario = datos["CURP"]
-    print(nombreUsuario)
-    print(type(nombreUsuario))
+    Nombre = input("Ingresa el nombre: ")
+    Apellido = input("Ingresa el apellido: ")
+    FechaNacimiento = input("Ingresa fecha de nacimiento ddmmaa: ")
+    Celular=input("Ingresa numero de celular: ")
+    Curp=input("Ingresa CURP: ")
+    Ciudad=input("Ingresa tu ciudad de origen: ")
+
+    try:
+        conexion= sqlite3.connect("sistema_bancario.db")
+        cursor=conexion.cursor()
+        sql='''INSERT INTO usuarios (Nombre, Apellido, FechaNacimiento, Celular, Curp, Ciudad) 
+                VALUES (?, ?, ?, ?, ?, ?)'''
+        valores=(Nombre,Apellido,FechaNacimiento,Celular,Curp,Ciudad)
+        cursor.execute(sql,valores)
+        conexion.commit()
+        print("****BIENVENIDO****")
+        print(Nombre, Apellido)
+    except sqlite3.IntegrityError:
+        print("ERROR: El CURP ya está registrado...")
+    finally:
+        conexion.close()
+crear_conexion()
 usuario ()
-
-def estadoCuenta ():
-    print("*******ESTADO DE CUENTA*******")
-
-estadoCuenta()
