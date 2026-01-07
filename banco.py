@@ -15,7 +15,9 @@ Curp = None
 Ciudad = None
 Contraseña = None
 Monto = 0
+NombreUsuario=None
 def crear_conexion():
+    global Nombre, Apellido, FechaNacimiento, Celular, Curp, Ciudad, Contraseña, Monto, NombreUsuario
     conexion = sqlite3.connect("sistema_bancario.db")
     cursor = conexion.cursor()
     cursor.execute('''
@@ -36,6 +38,7 @@ def crear_conexion():
     conexion.close()
 """
 def usuario ():
+    global Nombre, Apellido, FechaNacimiento, Celular, Curp, Ciudad, Contraseña, Monto, NombreUsuario
     Nombre = input("Ingresa el nombre: ")
     Apellido = input("Ingresa el apellido: ")
     FechaNacimiento = input("Ingresa fecha de nacimiento ddmmaa: ")
@@ -67,19 +70,29 @@ crear_conexion()
 usuario()
 """
 
-
 def estadoCuenta ():
-    nombreUsuario=input("Ingresa tu nombre de usuario: ")
-    Contraseña=input("Ingresa tu contraseña: ")
-    if (nombreUsuario==nombreUsuario) and (Contraseña==Contraseña):
-        print("ESTADO DE CUENTA")
-        print("Bienvenido ", nombreUsuario)
-        print("Saldo actual $", Monto)
+    nombre_usuario=input("Ingresa tu nombre de usuario: ")
+    contraseña=input("Ingresa tu contraseña: ")
+    #Conectar con los valores de la base de datos
+    conexion=sqlite3.connect("sistema_bancario.db")
+    cursor=conexion.cursor()
+    cursor.execute("SELECT NombreUsuario, Contraseña, monto FROM usuarios WHERE NombreUsuario = ?", (nombre_usuario,))
+    resultado=cursor.fetchone()
+    conexion.close()
+    if resultado is not None:
+        db_nombre=resultado[7]
+        db_contraseña=resultado[8]
+        if nombre_usuario==db_nombre and contraseña==db_contraseña:
+            print("**BIENVENIDO**")
+            print("Usuario: {db_nombre}")
+            print("Saldo:   {resultado[9]}")
+        else:
+            print("Contraseña incorrecta")
     else:
-        print("Usuario no encontrado")
+        print("Usuario no registrado")
+
 estadoCuenta()
-
-
+"""
 
 def ingresarDinero ():
     nombreUsuario=input("Ingresa tu nombre de usuario: ")
@@ -106,3 +119,4 @@ def retirarDinero():
         print("Usuario no encontrado")
 
 retirarDinero()
+"""
