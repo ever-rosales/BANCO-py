@@ -7,6 +7,7 @@ Funciones de un banco
 """
 import sqlite3
 import random
+import pandas as pd
 Nombre= None
 Apellido = None
 FechaNacimiento = None
@@ -70,35 +71,21 @@ crear_conexion()
 usuario()
 """
 def estadoCuenta (): #Funcion que permite conocer el estado de cuenta del usuario
-    global NombreUsuario,Contraseña,Monto
-    nombre_usuario=input("Ingresa tu nombre de usuario: ")
-    contraseña=input("Ingresa tu contraseña: ")
-    #Conectar con los valores de la base de datos
     conexion=sqlite3.connect("sistema_bancario.db")
-    cursor=conexion.cursor()
-    #Lenguaje base de datos
-    cursor.execute("SELECT NombreUsuario, Constraseña, monto FROM usuarios WHERE NombreUsuario = ?", (nombre_usuario,))
-    resultado=cursor.fetchone()
-    conexion.close()
-    if resultado is not None:
-        db_nombre=resultado[8]
-        db_contraseña=resultado[8]
-        if nombre_usuario==db_nombre and contraseña==db_contraseña:
-            print("**BIENVENIDO**")
-            print("Usuario: {db_nombre}")
-            print("Saldo Disponbile:   {resultado[9]}")
-        else:
-            print("Contraseña incorrecta")
+    print("Ingresa los siguientes datos")
+    nombreUsuario=input("Nombre de Usuario: ")
+    contraseña=input("Contraseña: ")
+    query="SELECT * FROM usuarios WHERE NombreUsuario=? AND Constraseña=?"
+    parametros=(nombreUsuario, contraseña)
+    df=pd.read_sql_query(query,conexion, params=parametros)
+    if not df.empty:
+        Nombre=df["Nombre"]
+        Apellido=df["Apellido"]
+        monto=df["monto"]
+        print("Bienvenido {Nombre} {Apellido}")
     else:
-        print("Usuario no registrado")
-        #opcion para registrar usuario
-        respuesta=int(input("Deseas registrarte? 1.SI 2.NO "))
-        """
-        if respuesta==1:
-            usuario()
-        elif respuesta==2:
-            print("Hasta luego")
-        """
+        print("Usuario no encontrado")
+    conexion.close()
 estadoCuenta()
 """
 def ingresarDinero (): 
