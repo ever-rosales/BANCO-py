@@ -71,21 +71,29 @@ crear_conexion()
 usuario()
 """
 def estadoCuenta (): #Funcion que permite conocer el estado de cuenta del usuario
-    conexion=sqlite3.connect("sistema_bancario.db")
-    print("Ingresa los siguientes datos")
-    nombreUsuario=input("Nombre de Usuario: ")
-    contraseña=input("Contraseña: ")
-    query="SELECT * FROM usuarios WHERE NombreUsuario=? AND Constraseña=?"
-    parametros=(nombreUsuario, contraseña)
-    df=pd.read_sql_query(query,conexion, params=parametros)
-    if not df.empty:
-        Nombre=df["Nombre"]
-        Apellido=df["Apellido"]
-        monto=df["monto"]
-        print("Bienvenido {Nombre} {Apellido}")
-    else:
-        print("Usuario no encontrado")
-    conexion.close()
+    while True:
+        conexion=sqlite3.connect("sistema_bancario.db")
+        print("Ingresa los siguientes datos")
+        nombreUsuario=input("Nombre de Usuario: ")
+        contraseña=input("Contraseña: ")
+        query="SELECT * FROM usuarios WHERE NombreUsuario=? AND Constraseña=?"
+        parametros=(nombreUsuario, contraseña)
+        df=pd.read_sql_query(query,conexion, params=parametros)
+        conexion.close()
+        if not df.empty:
+            Nombre=df["Nombre"].iloc[0]
+            Apellido=df["Apellido"].iloc[0]
+            monto=df["monto"].iloc[0]
+            print("Bienvenido")
+            print(" ", Nombre, " ", Apellido)
+            print("Monto Disponible $",monto)
+            break
+        else:
+            print("Usuario no encontrado")
+            respuesta=input("Quieres volver a ingresar datos? 1.Si/2.No ").lower()
+            if (respuesta!="1"):
+                print("Hasta luego...")
+                break
 estadoCuenta()
 """
 def ingresarDinero (): 
