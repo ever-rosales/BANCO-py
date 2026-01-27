@@ -69,7 +69,7 @@ def usuario (): #Funcion que permite registrar un usuario con los valores establ
         conexion.close()
 crear_conexion()
 usuario()
-"""
+
 def estadoCuenta (): #Funcion que permite conocer el estado de cuenta del usuario
     while True:
         conexion=sqlite3.connect("sistema_bancario.db")
@@ -95,30 +95,73 @@ def estadoCuenta (): #Funcion que permite conocer el estado de cuenta del usuari
                 print("Hasta luego...")
                 break
 estadoCuenta()
-"""
-def ingresarDinero (): 
-    nombreUsuario=input("Ingresa tu nombre de usuario: ")
-    Contraseña=input("Ingresa tu contraseña: ")
-    if (nombreUsuario==nombreUsuario) and (Contraseña==Contraseña):
-        print("Usuario: ", nombreUsuario)
-        Monto=int(input("Ingresa el monto a tu cuenta: "))
-        Monto+=Monto
-        print("Monto disponible $", Monto)
-    else:
-        print("Usuario no encontrado")
-ingresarDinero()
 
+
+def ingresarDinero ():
+    while True:
+        conexion=sqlite3.connect("sistema_bancario.db")
+        print("INGRESANDO DINERO")
+        print("Ingresa los siguientes datos")
+        nombreUsuario=input("Nombre de usuario: ")
+        contraseña=input("Contraseña: ")
+        query="SELECT * FROM usuarios WHERE NombreUsuario=? AND Constraseña=?"
+        parametros=(nombreUsuario,contraseña)
+        df=pd.read_sql_query (query, conexion, params=parametros)
+        if not df.empty:
+            Nombre=df["Nombre"].iloc[0]
+            Apellido=df["Apellido"].iloc[0]
+            saldo_actual=float(df["monto"].iloc[0])
+            print("BIENVENIDO")
+            print("",Nombre, " ", Apellido)
+            deposito=float(input("Digita el monto a ingresar: "))
+            nuevo_saldo=saldo_actual+deposito
+            cursor=conexion.cursor()
+            update_query="UPDATE usuarios SET monto=? WHERE NombreUsuario=?"
+            cursor.execute(update_query, (nuevo_saldo,nombreUsuario))
+            conexion.commit()
+            print(f"Depósito exitoso. Tu nuevo saldo es ${float(nuevo_saldo)}")
+            conexion.close()
+            break
+        else:
+            conexion.close()
+            print("Usuario no encontrado")
+            respuesta=int(input("Quieres volver a ingresar datos? 1.Si/2.No "))
+            if (respuesta!=1):
+                print("Hasta luego..")
+                break
+ingresarDinero()
+"""
 
 def retirarDinero():
-    nombreUsuario=input("Ingresa tu nombre de usuario: ")
-    Contraseña=input("Ingresa tu contraseña: ")
-    if (nombreUsuario==nombreUsuario) and (Contraseña==Contraseña):
-        print("Usuario: ", nombreUsuario)
-        Monto=int(input("Ingresa el monto a retirar de tu cuenta: "))
-        Monto-=Monto
-        print("Monto disponible $", Monto)
-    else:
-        print("Usuario no encontrado")
-
+    while True:
+        conexion=sqlite3.connect("sistema_bancario.db")
+        print("RETIRANDO DINERO")
+        print("Ingresa los siguientes datos")
+        nombreUsuario=input("Ingresa tu nombre de usuario: ")
+        contraseña=input("Ingresa tu contraseña: ")
+        query="SELECT * FROM usuarios WHERE NombreUsuario=? AND Constraseña=?"
+        parametros=(nombreUsuario,contraseña)
+        df=pd.read_sql_query (query, conexion, params=parametros)
+        if not df.empty:
+            Nombre=df["Nombre"].iloc[0]
+            Apellido=df["Apellido"].iloc[0]
+            saldo_actual=float(df["monto"].iloc[0])
+            print("BIENVENIDO")
+            print(Nombre, " ", Apellido)
+            retiro=float(input("Digita el monto a retirar $"))
+            nuevo_saldo=saldo_actual-retiro
+            cursor=conexion.cursor()
+            update_query="UPDATE usuarios SET monto=? WHERE NombreUsuario=?"
+            cursor.execute(update_query, (nuevo_saldo,nombreUsuario))
+            conexion.commit()
+            print(f"Depósito exitoso. Tu nuevo saldo es ${float(nuevo_saldo)}")
+            conexion.close()
+            break
+        else:
+            conexion.close()
+            print("Usuario no encontrado")
+            respuesta=int(input("Quieres volver a ingresar datos? 1.Si/2.No"))
+            if (respuesta!=1):
+                print("Hasta luego")
+                break
 retirarDinero()
-"""
